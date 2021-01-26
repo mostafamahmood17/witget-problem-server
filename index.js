@@ -20,6 +20,7 @@ client.connect((err) => {
   console.error(err)
   
   const buyCollections = client.db(`${process.env.DB_DATA}`).collection(`${process.env.DB_USER}`);
+  const sellCollections = client.db(`${process.env.DB_DATA}`).collection(`${process.env.DB_SELL}`);
 
   
   console.log("Database connected");
@@ -29,6 +30,16 @@ client.connect((err) => {
   app.post("/buy", (req, res) => {
     const buyInfo = req.body;
     buyCollections.insertOne(buyInfo)
+    .then((result) => {
+      res.send(result.insertedCount > 0);
+    });
+  });
+
+
+  app.post("/sell", (req, res) => {
+    const sellInfo = req.body;
+    console.log(sellInfo)
+    sellCollections.insertOne(sellInfo)
     .then((result) => {
       res.send(result.insertedCount > 0);
     });
