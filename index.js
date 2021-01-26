@@ -19,7 +19,7 @@ app.use(express());
 client.connect((err) => {
   console.error(err)
   
-  const buy = client.db(`${process.env.DB_DATA}`).collection(`${process.env.DB_USER}`);
+  const buyCollections = client.db(`${process.env.DB_DATA}`).collection(`${process.env.DB_USER}`);
 
   
   console.log("Database connected");
@@ -27,20 +27,12 @@ client.connect((err) => {
   
 
   app.post("/buy", (req, res) => {
-    console.log(req.body)
-    buy.insertOne(req.body).then((result) => {
+    const buyInfo = req.body;
+    buyCollections.insertOne(buyInfo)
+    .then((result) => {
       res.send(result.insertedCount > 0);
     });
   });
-
-  
-  
-  // app.post("/sell", (req, res) => {
-  //   sell.insertOne(req.body).then((result) => {
-  //     res.send(result.insertedCount > 0);
-  //   });
-  // });
-
 
 });
 
@@ -49,7 +41,3 @@ app.get("/", (req, res) => {
 });
 
 app.listen(5000)
-
-// app.listen(process.env.PORT, () => {
-//   console.log(`Example app listening at http://localhost:${process.env.PORT}`);
-// });
